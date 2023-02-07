@@ -1,15 +1,18 @@
 package br.com.tasklist.controller;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,14 +26,14 @@ public class Controller {
 	@Autowired
 	private TaskRepository taskRepository;
 	
-	// @RequestMapping(value = "/initial/{taskname}", method = RequestMethod.GET)
-	//@ResponseStatus(HttpStatus.OK)
-	//public String initial (@PathVariable String taskname) {
-		//Task task = new Task();
-		//task.setTaskName(taskname);
+	/* @RequestMapping(value = "/initial/{taskname}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public String initial (@PathVariable String taskname) {
+		Task task = new Task();
+		task.setTaskName(taskname);
 		
-		//taskRepository.save(task);
-		//return "Task Created: " + taskname; 
+		taskRepository.save(task);
+		return "Task Created: " + taskname; */
 	
 	//}
 	
@@ -41,4 +44,17 @@ public class Controller {
 		return new ResponseEntity<Task>(tsk, HttpStatus.CREATED);
 		
 	}
+	
+	@GetMapping (value = "findall")
+	public ResponseEntity<List<Task>> taskUser() {
+		List<Task> tasks = taskRepository.findAll();
+		return new ResponseEntity<List<Task>> (tasks, HttpStatus.OK);
+	}
+	
+	public ResponseEntity<String> delete (@RequestParam Long id) {
+		
+		taskRepository.deleteById(id);
+		return new ResponseEntity<String> ("successfully deleted task", HttpStatus.OK);
+	}
+	
 }
